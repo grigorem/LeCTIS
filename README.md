@@ -13,7 +13,7 @@ ___
 1. Alegerea sursei codului
    1. Dintr-un fisier sursa
    2. Se creeaza un nou prototip de funcție
-2. Specificarea detaliilor de compilare (dacă e nevoie)
+2. Alegerea variabielelor de intrare/iesire, stabilirea dimensiunilor
 3. Alegerea destinației noului bloc
 4. Adaugarea in model
    1. Compilarea codului
