@@ -27,7 +27,7 @@ function [extractedFunctions, statusMessage] = extractFunctions(sourceFile)
     end
     
     % check the source file existence
-    if ~exist(source, 'file')
+    if ~exist(sourceFile, 'file')
         statusMessage = 'Source file provided does not exist. Please call again with the appropiate argument.';
         return
     end
