@@ -1,5 +1,5 @@
 %% Application initialization functions
-function varargout = LeCTIS(varargin)
+function varargout = lectis(varargin)
     gui_Singleton = 1;
     gui_State = struct('gui_Name',       mfilename,...
                        'gui_Singleton',  gui_Singleton,...

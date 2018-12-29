@@ -1,5 +1,5 @@
 %% Application initialization functions
-function varargout = guiCreate(varargin)
+function varargout = guiGlobal(varargin)
     gui_Singleton = 1;
     gui_State = struct('gui_Name',       mfilename,...
                        'gui_Singleton',  gui_Singleton,...
@@ -18,3 +18,12 @@ function varargout = guiCreate(varargin)
     end
 end
 
+
+%% UI controls callbacks
+function buttonStepBack_Callback(hObject, eventdata, handles)
+    
+end
+
+function buttonStepNext_Callback(hObject, eventdata, handles)
+    
+end
