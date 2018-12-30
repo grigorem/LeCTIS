@@ -29,6 +29,19 @@ function LeCTIS_OpeningFcn(hObject, eventdata, handles, varargin)
     newWindowPosition(2) = floor(screenSize(4) / 2) - floor(windowPosition(4) / 2);
     
     set(hObject, 'Position', newWindowPosition);
+    
+    % add the step panels names to the app data of the global panel
+    stepsPanels = { 'panelSource',...
+                    'panelIo',...
+                    'panelDestination',...
+                    'panelIntegrate',...
+                    'panelSave'};
+    setappdata(handles.panelGlobal, 'stepsPanels', stepsPanels);
+    setappdata(handles.panelGlobal, 'currentStep', 0);
+    
+    % "click" on the "Next" button to initialize panels
+    clickNextButton = get(handles.buttonStepNext, 'Callback');
+    clickNextButton(handles.buttonStepNext, []);
 end
 
 
