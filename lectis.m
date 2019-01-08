@@ -19,7 +19,11 @@ function varargout = lectis(varargin)
 end
 
 
-function LeCTIS_OpeningFcn(hObject, eventdata, handles, varargin) 
+function LeCTIS_OpeningFcn(hObject, eventdata, handles, varargin)
+    
+    % put this path and it's subfolders in matlab path
+    addpath(genpath(fileparts(mfilename('fullpath'))));
+    
     % put the window in the middle of the screen
     screenSize = get(groot, 'ScreenSize');
     windowPosition = get(hObject, 'Position');
