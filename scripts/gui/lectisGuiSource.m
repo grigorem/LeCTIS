@@ -56,7 +56,7 @@ end
 
 function buttonSourceFile_Callback(hObject, eventdata, handles)
     % choose soource file
-    [sourceName, sourcePath] = uigetfile({'*.c', '(*.c) C source file'; '*.cpp', '(*.cpp) C++ source file'}, 'Choose a C/C++ source file');
+    [sourceName, sourcePath] = uigetfile({'*.c;*.cpp', 'C/C++ source file'}, 'Choose a C/C++ source file');
 
     if ~ischar(sourceName) || ~ischar(sourcePath)
         return
@@ -97,5 +97,5 @@ function processSourceFile(handles, sourceFile)
     set(handles.editSourceFile, 'String', sourceFile);
     
     % put the inputs/outputs in the next panel
-    msgbox('You must put the ios to the next panel', 'Title', 'warn', 'modal');
+    lectisGuiIo('addFunctionsToGui', extractedFunctions);
 end
