@@ -1,23 +1,17 @@
-%% Application initialization functions
-function varargout = guiSource(varargin)
-
-    gui_Singleton = 1;
-    gui_State = struct('gui_Name',       mfilename,...
-                       'gui_Singleton',  gui_Singleton,...
-                       'gui_OpeningFcn', @LeCTIS_OpeningFcn,...
-                       'gui_OutputFcn',  @LeCTIS_OutputFcn,...
+%% Application initialization function
+function lectisGuiSource(varargin)
+    gui_State = struct('gui_Name',       'lectis',...
+                       'gui_Singleton',  true,...
+                       'gui_OpeningFcn', [],...
+                       'gui_OutputFcn',  [],...
                        'gui_LayoutFcn',  [],...
                        'gui_Callback',   []);
     if nargin && ischar(varargin{1})
         gui_State.gui_Callback = str2func(varargin{1});
-    end
-
-    if nargout
-        [varargout{1:nargout}] = gui_mainfcn(gui_State, varargin{:});
-    else
         gui_mainfcn(gui_State, varargin{:});
     end
 end
+
 
 %% UI controls callbacks
 function radioSourceFile_Callback(hObject, eventdata, handles)
@@ -76,6 +70,10 @@ function buttonSourceFile_Callback(hObject, eventdata, handles)
 end
 
 
+function buttonSourceStub_Callback(hObject, eventdata, handles)
+    
+end
+
 %% non UI functions
 
 function processSourceFile(handles, sourceFile)
@@ -87,16 +85,17 @@ function processSourceFile(handles, sourceFile)
     end
     
     % extract functions
-    [extractedFunctions, extractionStatus] = extractFunctions(sourceFile);
+    [extractedFunctions, extractionStatus] = lectisExtractFunctions(sourceFile);
     
     % check functions
     if isempty(extractedFunctions)
-        msgbox(['Source file could not be added: ', extractionStatus], 'Source not existing', 'error', 'modal');
+        msgbox(['Source file could not be added: ', extractionStatus], 'Source file error', 'error', 'modal');
         return
     end
     
     % set the source file in the interface
     set(handles.editSourceFile, 'String', sourceFile);
     
-    disp('done');
+    % put the inputs/outputs in the next panel
+    msgbox('You must put the ios to the next panel', 'Title', 'warn', 'modal');
 end

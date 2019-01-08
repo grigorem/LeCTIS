@@ -1,4 +1,4 @@
-%% Application initialization functions
+%% Application initialization function
 function lectisGuiGlobal(varargin)
     gui_State = struct('gui_Name',       'lectis',...
                        'gui_Singleton',  true,...
@@ -20,7 +20,7 @@ function buttonStepNext_Callback(hObject, eventdata, handles)
     stepsPanels = getappdata(handles.panelGlobal, 'stepsPanels');
     currentStep = getappdata(handles.panelGlobal, 'currentStep') + 1;
     
-    setPanelActive(stepsPanels, currentStep, handles)
+    switchActivePanel(stepsPanels, currentStep, handles)
         
 end
 
@@ -29,12 +29,12 @@ function buttonStepBack_Callback(hObject, eventdata, handles)
     stepsPanels = getappdata(handles.panelGlobal, 'stepsPanels');
     currentStep = getappdata(handles.panelGlobal, 'currentStep') - 1;
     
-    setPanelActive(stepsPanels, currentStep, handles)
+    switchActivePanel(stepsPanels, currentStep, handles)
 end
 
 %% other functions
 
-function setPanelActive(panels, currentStep, handles)
+function switchActivePanel(panels, currentStep, handles)
     
     % return if index exceeds limits
     if currentStep < 1 || currentStep > length(panels)
