@@ -97,5 +97,5 @@ function processSourceFile(handles, sourceFile)
     set(handles.editSourceFile, 'String', sourceFile);
     
     % put the inputs/outputs in the next panel
-    lectisGuiIo('addFunctionsToGui', extractedFunctions);
+    lectisGuiIo('addFunctionsToGui', extractedFunctions, handles);
 end

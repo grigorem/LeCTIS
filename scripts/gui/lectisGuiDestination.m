@@ -13,3 +13,15 @@ function lectisGuiDestination(varargin)
 end
 
 %% UI controls callbacks
+
+function radioDestinationBlock_Callback(hObject, eventdata, handles)
+
+end
+
+function radioDestinationMultiple_Callback(hObject, eventdata, handles)
+
+end
+
+function radioDestinationAdd_Callback(hObject, eventdata, handles)
+
+end

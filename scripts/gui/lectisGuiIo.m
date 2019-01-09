@@ -14,3 +14,13 @@ end
 
 
 %% UI controls callbacks
+function listboxIoFunctions_Callback(hObject, eventdata, handles)
+    
+end
+
+
+%% non UI functions
+
+function addFunctionsToGui(extractedFunctions, handles)
+    
+end
