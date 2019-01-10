@@ -8,7 +8,11 @@ function lectisGuiGlobal(varargin)
                        'gui_Callback',   []);
     if nargin && ischar(varargin{1})
         gui_State.gui_Callback = str2func(varargin{1});
-        gui_mainfcn(gui_State, varargin{:});
+        if endsWith(varargin{1}, 'Callback')
+            gui_mainfcn(gui_State, varargin{:});     % run GUI callbacks
+        else
+            gui_State.gui_Callback(varargin{2:end}); % run other functions
+        end
     end
 end
 
