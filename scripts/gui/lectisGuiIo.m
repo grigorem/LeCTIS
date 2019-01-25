@@ -69,16 +69,40 @@ function addIos(selectedFunction, handles)
     delete(findobj(handles.panelIoIos,...
         '-not', 'Tag', 'panelIoIos',...
         '-not', 'Tag', 'staticIoVariableName',...
-        '-not', 'Tag', 'staticIoVariableType',...
+        '-not', 'Tag', 'staticIoVariableCodeType',...
+        '-not', 'Tag', 'staticIoVariableMatlabType',...
         '-not', 'Tag', 'staticIoInput',...
         '-not', 'Tag', 'staticIoOutput',...
-        '-not', 'Tag', 'staticIoDimension'));
+        '-not', 'Tag', 'staticIoDimension',...
+        '-not', 'Tag', 'staticIoParameter'));
     
     % structure where the handles to the current ios options will be added
     currentIos = struct('input', [], 'output', [], 'dimension', []);
     currentIos = currentIos(1:0);
     
-    % add ios to the interface
+    % get columns Y value for the IOs
+    namePosition       = get(handles.staticIoVariableName, 'Position');
+    xName              = namePosition(1);
+    
+    codeTypePosition   = get(handles.staticIoVariableCodeType, 'Position');
+    xCodeType          = codeTypePosition(1);
+    
+    matlabTypePosition = get(handles.staticIoVariableMatlabType, 'Position');
+    xMatlabType        = matlabTypePosition(1);
+    
+    inputPosition      = get(handles.staticIoInput, 'Position');
+    xInput             = inputPosition(1);
+    
+    outputPosition     = get(handles.staticIoOutput, 'Position');
+    xOutput            = outputPosition(1);
+    
+    parameterPosition  = get(handles.staticIoParameter, 'Position');
+    xParameter         = parameterPosition(1);
+    
+    dimensionPosition  = get(handles.staticIoDimension, 'Position');
+    xDimension         = dimensionPosition(1);
+    
+    % add ios to the interface    
     ioCallback = @(hObject, eventdata)lectisGuiIo('checkboxIo_Callback', hObject, eventdata, guidata(hObject));
     for iIo = 1:length(ios)
         
@@ -86,13 +110,14 @@ function addIos(selectedFunction, handles)
         io = ios(iIo);
         
         % position in the panel on Y axis
-        ioY = 320 - 20 * iIo;
+        yIo = 320 - 20 * iIo;
         
         % ios state
         if strcmp(io.name, 'return')
             inputValue  = false;
             outputValue = true;
-            ioEnable    = 'off';
+            insEnable    = 'off';
+            outEnable    = 'off';
             if ~isempty(io.pointer)
                 dimensionEnable = 'on';
             else
@@ -102,18 +127,26 @@ function addIos(selectedFunction, handles)
             if ~isempty(io.pointer)
                 inputValue      = false;
                 outputValue     = true;
-                ioEnable        = 'on';
+                insEnable       = 'on';
+                outEnable       = 'on';
                 dimensionEnable = 'on';
             else
                 inputValue      = true;
                 outputValue     = false;
-                ioEnable        = 'off';
+                insEnable       = 'on';
+                outEnable       = 'off';
                 dimensionEnable = 'off';
             end
         end
         
+        if isempty(io.mtype)
+            matlabTypeEnable = 'on';
+        else
+            matlabTypeEnable = 'off';
+        end
+        
         % add var name
-        namePosition = [10, ioY, 140, 15];
+        namePosition = [xName, yIo, 150, 15];
         nameTag      = ['staticIoName', num2str(iIo)];
         uicontrol(handles.panelIoIos,...
             'Style',               'text',...
@@ -124,20 +157,33 @@ function addIos(selectedFunction, handles)
             'Position',            namePosition,...
             'Tag',                 char(nameTag));
         
-        % add var type
-        typePosition = [150, ioY, 140, 15];
-        typeTag      = ['staticIoType', num2str(iIo)];
+        % add var C/C++ type
+        codeTypePosition = [xCodeType, yIo, 110, 15];
+        codeTypeTag      = ['staticIoCodeType', num2str(iIo)];
         uicontrol(handles.panelIoIos,...
             'Style',               'text',...
             'BackgroundColor',     [1, 1, 1],...
             'HorizontalAlignment', 'left',...
             'String',              char([io.type, io.pointer]),...
             'Units',               'pixels',...
-            'Position',            typePosition,...
-            'Tag',                 char(typeTag));
+            'Position',            codeTypePosition,...
+            'Tag',                 char(codeTypeTag));
+        
+        % add matlab type text box
+        matlabTypePosition = [xMatlabType, yIo, 100, 15];
+        matlabTypeTag      = ['editIoMatlabType', num2str(iIo)];
+        matlabTypeHandle   = uicontrol(handles.panelIoIos,...
+            'Style',               'edit',...
+            'BackgroundColor',     [1, 1, 1],...
+            'HorizontalAlignment', 'left',...
+            'String',              io.mtype,...
+            'Units',               'pixels',...
+            'Position',            matlabTypePosition,...
+            'Tag',                 matlabTypeTag,...
+            'Enable',              matlabTypeEnable);
         
         % add input checkbox
-        inputPosition = [290, ioY, 25, 15];
+        inputPosition = [xInput, yIo, 25, 15];
         inputTag      = ['checkboxIoInput', num2str(iIo)];
         inputHandle   = uicontrol(handles.panelIoIos,...
             'Style',           'checkbox',...
@@ -148,10 +194,24 @@ function addIos(selectedFunction, handles)
             'Tag',             inputTag,...
             'Callback',        ioCallback,...
             'Value',           inputValue,...
-            'Enable',          ioEnable);
+            'Enable',          insEnable);
+        
+        % add parameter checkbox
+        parameterPosition = [xParameter, yIo, 25, 15];
+        parameterTag      = ['checkboxIoOutput', num2str(iIo)];
+        parameterHandle   = uicontrol(handles.panelIoIos,...
+            'Style',           'checkbox',...
+            'BackgroundColor', [1, 1, 1],...
+            'String',          '',...
+            'Units',           'pixels',...
+            'Position',        parameterPosition,...
+            'Tag',             parameterTag,...
+            'Callback',        ioCallback,...
+            'Value',           false,...
+            'Enable',          insEnable);
         
         % add output checkbox
-        outputPosition = [320, ioY, 25, 15];
+        outputPosition = [xOutput, yIo, 25, 15];
         outputTag      = ['checkboxIoOutput', num2str(iIo)];
         outputHandle   = uicontrol(handles.panelIoIos,...
             'Style',           'checkbox',...
@@ -162,10 +222,10 @@ function addIos(selectedFunction, handles)
             'Tag',             outputTag,...
             'Callback',        ioCallback,...
             'Value',           outputValue,...
-            'Enable',          ioEnable);
+            'Enable',          outEnable);
         
         % add dimension text box
-        dimensionPosition = [350, ioY, 40, 15];
+        dimensionPosition = [xDimension, yIo, 40, 15];
         dimensionTag      = ['editIoDimension', num2str(iIo)];
         dimensionHandle   = uicontrol(handles.panelIoIos,...
             'Style',           'edit',...
@@ -177,12 +237,15 @@ function addIos(selectedFunction, handles)
             'Enable',          dimensionEnable);
         
         % link checkboxes to each other
-        set(inputHandle,  'UserData', outputHandle);
-        set(outputHandle, 'UserData', inputHandle);
+        set(inputHandle,     'UserData', [outputHandle, parameterHandle]);
+        set(outputHandle,    'UserData', [inputHandle, parameterHandle]);
+        set(parameterHandle, 'UserData', [inputHandle, outputHandle]);
         
         % add input, output and dimension handles to current inputs/outputs structure
-        currentIos(iIo).input     = inputHandle;
-        currentIos(iIo).output    = outputHandle;
-        currentIos(iIo).dimension = dimensionHandle;
+        currentIos(iIo).matlabType = matlabTypeHandle;
+        currentIos(iIo).input      = inputHandle;
+        currentIos(iIo).output     = outputHandle;
+        currentIos(iIo).parameter  = parameterHandle;
+        currentIos(iIo).dimension  = dimensionHandle;
     end
 end

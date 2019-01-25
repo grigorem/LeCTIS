@@ -1,4 +1,4 @@
-function [extractedFunctions, statusMessage] = extractFunctions(sourceFile)
+function [statusMessage, extractedFunctions] = lectisExtractFunctions(sourceFile)
     
     %% prepare for processing
     
@@ -74,6 +74,13 @@ function [extractedFunctions, statusMessage] = extractFunctions(sourceFile)
             else
                 ret.pointer = '';
             end
+            
+            [matlabTypeStatus, matlabType] = lectisGetMatlabType(ret.type);
+            if matlabTypeStatus
+                ret.mtype = matlabType;
+            else
+                ret.mtype = [];
+            end
         end
 
         % process arguments
@@ -94,6 +101,13 @@ function [extractedFunctions, statusMessage] = extractFunctions(sourceFile)
                 args(j).type    = strtrim(match{1});
                 args(j).pointer = strtrim(match{2});
                 args(j).name	= strtrim(match{3});
+                
+                [matlabTypeStatus, matlabType] = lectisGetMatlabType(args(j).type);
+                if matlabTypeStatus
+                    args(j).mtype = matlabType;
+                else
+                    args(j).mtype = [];
+                end
             end
         end
 

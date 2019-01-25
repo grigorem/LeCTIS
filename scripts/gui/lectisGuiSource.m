@@ -89,7 +89,7 @@ function processSourceFile(handles, sourceFile)
     end
     
     % extract functions
-    [extractedFunctions, extractionStatus] = lectisExtractFunctions(sourceFile);
+    [extractionStatus, extractedFunctions] = lectisExtractFunctions(sourceFile);
     
     % check functions
     if isempty(extractedFunctions)
