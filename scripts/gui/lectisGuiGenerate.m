@@ -1,5 +1,5 @@
 %% Application initialization functions
-function lectisGuiDestination(varargin)
+function lectisGuiGenerate(varargin)
     gui_State = struct('gui_Name',       'lectis',...
                        'gui_Singleton',  true,...
                        'gui_OpeningFcn', [],...
@@ -16,16 +16,5 @@ function lectisGuiDestination(varargin)
     end
 end
 
+
 %% UI controls callbacks
-
-function radioDestinationBlock_Callback(hObject, eventdata, handles)
-
-end
-
-function radioDestinationMultiple_Callback(hObject, eventdata, handles)
-
-end
-
-function radioDestinationAdd_Callback(hObject, eventdata, handles)
-
-end

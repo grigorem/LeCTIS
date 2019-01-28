@@ -1,5 +1,5 @@
 %% Application initialization functions
-function lectisGuiSave(varargin)
+function lectisGuiOptions(varargin)
     gui_State = struct('gui_Name',       'lectis',...
                        'gui_Singleton',  true,...
                        'gui_OpeningFcn', [],...
@@ -15,6 +15,5 @@ function lectisGuiSave(varargin)
         end
     end
 end
-
 
 %% UI controls callbacks
