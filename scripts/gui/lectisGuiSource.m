@@ -82,7 +82,7 @@ end
 function listboxIoFunctions_Callback(hObject, eventdata, handles)
     
     % get functions from appadata
-    functions = getappdata(handles.panelIo, 'functions');
+    functions = getappdata(handles.panelSource, 'functions');
     
     % get selected function index
     selectedFunction = get(handles.listboxIoFunctions, 'Value');
@@ -99,6 +99,72 @@ function checkboxIo_Callback(hObject, eventdata, handles)
     % set the checkboxes
     set(hObject,          'Value', true);
     set(theOtherCheckbox, 'Value', false);
+end
+
+
+function buttonSourceCancel_Callback(hObject, eventdata, handles)
+    % hide the panel
+    set(handles.panelSource, 'Visible', 'off');
+    
+    % call the cancel function in the other panel
+    lectisGuiFunctions('cancelFunctionChoosing', handles);
+end
+
+
+function buttonSourceOk_Callback(hObject, eventdata, handles)
+    
+    % get the currentIos handles
+    currentIos = getappdata(handles.panelSource, 'currentIos');
+    
+    % get the function name
+    functionsNames = get(handles.listboxIoFunctions, 'String');
+    functionName = functionsNames{get(handles.listboxIoFunctions, 'Value')};
+    
+    % declare the structure to be passed to the function which creates the call
+    func = struct('name', functionName, 'returnType', [], 'arguments', []);
+    
+    % put the return type if exists
+    returnIndex = find(strcmp({currentIos.name}, 'return'));
+    if length(returnIndex) == 1
+        func.returnType = get(currentIos(returnIndex).matlabType, 'String');
+        currentIos(returnIndex) = [];
+    end
+    
+    % declare the structure for arguments
+    args = struct('type', [], 'dataType', [], 'dimensions', []);
+    args = args(1:0);
+    for iCurrentIo = 1:length(currentIos)
+        currentIo = currentIos(iCurrentIo);
+        
+        % type of the argument
+        if get(currentIo.input, 'Value')
+            args(iCurrentIo).type = 'input';
+        elseif get(currentIo.parameter, 'Value')
+            args(iCurrentIo).type = 'parameter';
+        else
+            args(iCurrentIo).type = 'output';
+        end
+        
+        % data type of the argument
+        args(iCurrentIo).dataType = get(currentIo.matlabType, 'String');
+        
+        % dimension
+        if strcmp(get(currentIo.dimension, 'Enable'), 'on')
+            args(iCurrentIo).dimension = eval(get(currentIo.dimension, 'String'));
+        end
+    end
+    
+    func.arguments = args;
+    
+    % call the function from the functions panel
+    functionType = getappdata(handles.panelSource, 'functionType');
+    functionDefinition = lectisGenerateMFunctionCall(func);
+    sourcePath = get(handles.editSourceFile, 'String');
+    
+    lectisGuiFunctions('addChosenFunction', handles, functionType, functionDefinition, sourcePath);
+    
+    % hide the panel
+    set(handles.panelSource, 'Visible', 'off');
 end
 
 %% non UI functions
@@ -133,7 +199,7 @@ function addFunctionsToGui(functions, handles)
     set(handles.listboxIoFunctions, 'String', {functions.name});
     
     % set the functions to the panel's appdata
-    setappdata(handles.panelIo, 'functions', functions);
+    setappdata(handles.panelSource, 'functions', functions);
     
     % run the callback for the listbox selection
     listboxIoFunctionsCallback = get(handles.listboxIoFunctions, 'Callback');
@@ -143,12 +209,12 @@ end
 function addIos(selectedFunction, handles)
     
     % get only the inputs/outputs
-    ios = selectedFunction.args;
+    args = selectedFunction.args;
     
     % add return to the ios
     if ~isempty(selectedFunction.return)
         selectedFunction.return.name = 'return';
-        ios = [selectedFunction.return, ios']';
+        args = [selectedFunction.return, args']';
     end
     
     % remove ios if there are already there
@@ -163,7 +229,7 @@ function addIos(selectedFunction, handles)
         '-not', 'Tag', 'staticIoParameter'));
     
     % structure where the handles to the current ios options will be added
-    currentIos = struct('input', [], 'output', [], 'dimension', []);
+    currentIos = struct('name', [], 'matlabType', [], 'input', [], 'parameter', [], 'output', [], 'dimension', []);
     currentIos = currentIos(1:0);
     
     % get columns Y value for the IOs
@@ -190,13 +256,13 @@ function addIos(selectedFunction, handles)
     
     % add ios to the interface    
     ioCallback = @(hObject, eventdata)lectisGuiSource('checkboxIo_Callback', hObject, eventdata, guidata(hObject));
-    for iIo = 1:length(ios)
+    for iIo = 1:length(args)
         
         % current element
-        io = ios(iIo);
+        io = args(iIo);
         
         % position in the panel on Y axis
-        yIo = 320 - 20 * iIo;
+        yIo = 280 - 20 * iIo;
         
         % ios state
         if strcmp(io.name, 'return')
@@ -328,10 +394,25 @@ function addIos(selectedFunction, handles)
         set(parameterHandle, 'UserData', [inputHandle, outputHandle]);
         
         % add input, output and dimension handles to current inputs/outputs structure
+        currentIos(iIo).name       = io.name;
         currentIos(iIo).matlabType = matlabTypeHandle;
         currentIos(iIo).input      = inputHandle;
         currentIos(iIo).output     = outputHandle;
         currentIos(iIo).parameter  = parameterHandle;
         currentIos(iIo).dimension  = dimensionHandle;
     end
+    
+    % set the current Ios
+    setappdata(handles.panelSource, 'currentIos', currentIos);
+end
+
+function initFunctionChoosing(handles, functionType)
+    % show the panel
+    set(handles.panelSource, 'Visible', 'on');
+    
+    % set the title of the panel
+    set(handles.staticSourceTitle, 'String', [functionType, ' function source']);
+
+    % set the function type in app data
+    setappdata(handles.panelSource, 'functionType', functionType);
 end

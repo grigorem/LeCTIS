@@ -34,12 +34,15 @@ function LeCTIS_OpeningFcn(hObject, eventdata, handles, varargin)
     
     set(hObject, 'Position', newWindowPosition);
     
+    % hide source panel
+    set(handles.panelSource, 'Visible', 'off');
+    
     % add the step panels names to the app data of the global panel
     stepsPanels = { 'panelWelcome',...
                     'panelFunctions',...
                     'panelFiles',...
                     'panelOptions',...
-                    'panelGenerate'};
+                    'panelGenerate'}; % * will only be hidden
     setappdata(handles.panelGlobal, 'stepsPanels', stepsPanels);
     setappdata(handles.panelGlobal, 'currentStep', 0);
     
