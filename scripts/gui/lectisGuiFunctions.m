@@ -58,8 +58,15 @@ function addChosenFunction(handles, functionType, functionDefinition, sourcePath
             set(handles.editFunctionsTerminateSource, 'String', sourcePath);
             set(handles.editFunctionsTerminateDefinition, 'String', functionDefinition);
             set(handles.editFunctionsTerminateDefinition, 'TooltipString', functionDefinition);
-    end
+		otherwise
+			return
+	end
     
+	% set the next panel available to switch
+	nextAvailable = getappdata(handles.panelGlobal, 'nextAvailable');
+	nextAvailable(2) = true;
+	setappdata(handles.panelGlobal, 'nextAvailable', nextAvailable);
+	
     % show the panel
     set(handles.panelFunctions, 'Visible', 'on');
 end

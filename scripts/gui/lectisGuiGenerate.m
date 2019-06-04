@@ -16,5 +16,21 @@ function lectisGuiGenerate(varargin)
     end
 end
 
+function buttonGenerateOutput_Callback(hObject, eventdata, handles)
+	% choose output directory
+    outputDirectory = uigetdir(pwd, 'Choose S-Function output directory');
+
+	if ~ischar(outputDirectory) || isempty(outputDirectory)
+        return
+	end
+	
+	% set the directory in the text box
+	set(handles.editGenerateOutput, 'String', outputDirectory);
+end
+
+function buttonGenerate_Callback(hObject, eventdata, handles)
+	
+end
+
 
 %% UI controls callbacks

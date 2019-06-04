@@ -37,13 +37,17 @@ function LeCTIS_OpeningFcn(hObject, eventdata, handles, varargin)
     % hide source panel
     set(handles.panelSource, 'Visible', 'off');
     
-    % add the step panels names to the app data of the global panel
+    % create steps panels and next available variables
     stepsPanels = { 'panelWelcome',...
                     'panelFunctions',...
                     'panelFiles',...
                     'panelOptions',...
-                    'panelGenerate'}; % * will only be hidden
+                    'panelGenerate'};
+	nextAvailable = [true, false(1, length(stepsPanels) - 1)];
+	
+	% set the previus variables as app data
     setappdata(handles.panelGlobal, 'stepsPanels', stepsPanels);
+	setappdata(handles.panelGlobal, 'nextAvailable', nextAvailable);
     setappdata(handles.panelGlobal, 'currentStep', 0);
     
     % "click" on the "Next" button to initialize panels

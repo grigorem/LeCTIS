@@ -118,7 +118,10 @@ function buttonSourceOk_Callback(hObject, eventdata, handles)
     
     % get the function name
     functionsNames = get(handles.listboxIoFunctions, 'String');
-    functionName = functionsNames{get(handles.listboxIoFunctions, 'Value')};
+	if isempty(functionsNames)
+		return
+	end
+	functionsNames = functionsNames{get(handles.listboxIoFunctions, 'Value')};
     
     % declare the structure to be passed to the function which creates the call
     func = struct('name', functionName, 'returnType', [], 'arguments', []);

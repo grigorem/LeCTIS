@@ -22,18 +22,22 @@ function buttonStepNext_Callback(hObject, eventdata, handles)
     
     % get info from the appdata
     stepsPanels = getappdata(handles.panelGlobal, 'stepsPanels');
-    currentStep = getappdata(handles.panelGlobal, 'currentStep') + 1;
+    currentStep = getappdata(handles.panelGlobal, 'currentStep');
+	nextAvailable = getappdata(handles.panelGlobal, 'nextAvailable');
     
-    switchActivePanel(stepsPanels, currentStep, handles)
-        
+	if currentStep == 0 || nextAvailable(currentStep)
+		switchActivePanel(stepsPanels, currentStep + 1, handles);
+	else
+		msgbox('Could not go NEXT. Please fill any of the required fields.', 'Error', 'error', 'modal');
+	end
 end
 
 function buttonStepBack_Callback(hObject, eventdata, handles)
     % get info from the appdata
     stepsPanels = getappdata(handles.panelGlobal, 'stepsPanels');
-    currentStep = getappdata(handles.panelGlobal, 'currentStep') - 1;
+    currentStep = getappdata(handles.panelGlobal, 'currentStep');
     
-    switchActivePanel(stepsPanels, currentStep, handles)
+    switchActivePanel(stepsPanels, currentStep - 1, handles);
 end
 
 %% other functions
