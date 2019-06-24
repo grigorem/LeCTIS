@@ -153,7 +153,7 @@ function buttonSourceOk_Callback(hObject, eventdata, handles)
         
         % dimension
         if strcmp(get(currentIo.dimension, 'Enable'), 'on')
-            args(iCurrentIo).dimension = eval(get(currentIo.dimension, 'String'));
+            args(iCurrentIo).dimensions = eval(get(currentIo.dimension, 'String'));
         end
     end
     
@@ -164,7 +164,7 @@ function buttonSourceOk_Callback(hObject, eventdata, handles)
     functionDefinition = lectisGenerateMFunctionCall(func);
     sourcePath = get(handles.editSourceFile, 'String');
     
-    lectisGuiFunctions('addChosenFunction', handles, functionType, functionDefinition, sourcePath);
+    lectisGuiFunctions('addChosenFunction', handles, functionType, func.name, functionDefinition, sourcePath);
     
     % hide the panel
     set(handles.panelSource, 'Visible', 'off');

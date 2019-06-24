@@ -40,9 +40,9 @@ function LeCTIS_OpeningFcn(hObject, eventdata, handles, varargin)
     % create steps panels and next available variables
     stepsPanels = { 'panelWelcome',		[];
                     'panelFunctions',	[];
-                    'panelFiles', [];
-                    'panelOptions', [];
-                    'panelGenerate', []w};
+                    'panelFiles',		[];
+                    'panelOptions',		[];
+                    'panelGenerate',	[]};
 	nextAvailable = [true, false(1, length(stepsPanels) - 1)];
 	
 	% set the previus variables as app data

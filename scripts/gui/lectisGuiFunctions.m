@@ -38,7 +38,7 @@ end
 
 %% non UI functions
 
-function addChosenFunction(handles, functionType, functionDefinition, sourcePath)
+function addChosenFunction(handles, functionType, functionName, functionDefinition, sourcePath)
 
     % put the function definition and source path in their corresponding textboxes
 	switch functionType
@@ -62,15 +62,13 @@ function addChosenFunction(handles, functionType, functionDefinition, sourcePath
 			return
 	end
 	
-	% set the function definition as app data
-	setappdata(handles.panelFunctions, ['function', functionType], functionDefinition);
-	
-	% set the source file in the next panel
-	sources = getappdata(handles.panelFiles, 'sources');
-	if isempty(sources) || ~any(ismember(sources, sourcePath))
-		sources = [sources, {sourcePath}];
-		setappdata(handles.panelFiles, 'sources', sources);
+	if strcmp(functionType, 'Output') || isempty(get(handles.editGenerateName, 'String'))
+		set(handles.editGenerateName, 'String', functionName);
+		set(handles.editGenerateOutput, 'String', pwd);
 	end
+	
+	% add the source file in the next panel
+	lectisGuiFiles('addFilesToListbox', handles.listboxFilesSourcesHeaders, {sourcePath});
     
 	% set the next panel available to switch
 	nextAvailable = getappdata(handles.panelGlobal, 'nextAvailable');

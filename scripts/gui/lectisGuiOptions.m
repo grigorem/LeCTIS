@@ -17,3 +17,14 @@ function lectisGuiOptions(varargin)
 end
 
 %% UI controls callbacks
+
+function dropdownOptionsSampleTime_Callback(hObject, eventdata, handles)
+	sampleTimes = get(hObject, 'String');
+	sampleTime = strtrim(sampleTimes{get(hObject, 'Value')});
+	
+	if strcmp(sampleTime, 'fixed')
+		set(handles.editOptionsSampleTime, 'Enable', 'on');
+	else
+		set(handles.editOptionsSampleTime, 'Enable', 'off');
+	end
+end
