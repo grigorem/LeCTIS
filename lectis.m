@@ -42,7 +42,8 @@ function LeCTIS_OpeningFcn(hObject, eventdata, handles, varargin)
                     'panelFunctions',	[];
                     'panelFiles',		[];
                     'panelOptions',		[];
-                    'panelGenerate',	[]};
+                    'panelGenerate',	[];
+					'panelIntegrate',	[];};
 	nextAvailable = [true, false(1, length(stepsPanels) - 1)];
 	
 	% set the previus variables as app data
@@ -53,6 +54,10 @@ function LeCTIS_OpeningFcn(hObject, eventdata, handles, varargin)
     % "click" on the "Next" button to initialize panels
     clickNextButton = get(handles.buttonStepNext, 'Callback');
     clickNextButton(handles.buttonStepNext, []);
+	
+	% initialize the integration panel
+	radioPushFunction = get(handles.radioIntegrateAdd, 'Callback');
+	radioPushFunction(handles.radioIntegrateAdd, []);
 end
 
 

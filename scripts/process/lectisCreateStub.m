@@ -1,3 +1,3 @@
-function createStub(stubPrototype, destination)
+function lectisCreateStub(stubPrototype, destination)
     
 end
