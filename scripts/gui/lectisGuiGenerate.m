@@ -111,8 +111,37 @@ function buttonGenerate_Callback(hObject, eventdata, handles)
 	
 	lct.Options = opt;
 	
-	legacy_code('sfcn_cmex_generate', lct);
-	legacy_code('compile', lct);
+	% change the directory
+	initialPath = pwd;
+	outputPath	= get(handles.editGenerateOutput, 'String');
+	cd(outputPath);
+	
+	try
+		% generate the function source file
+		legacy_code('sfcn_cmex_generate', lct);
+
+		% compile the source file and create the MEX file
+		legacy_code('compile', lct);
+		
+		% change back the directory
+		cd(initialPath);
+		
+		% set the appdata for the generated MEX
+		mexFile = fullfile(outputPath, [lct.SFunctionName, '.mexw64']);
+		if ~exist(mexFile, 'file')
+			mexFile = fullfile(outputPath, [lct.SFunctionName, '.mexw32']);
+		end
+		setappdata(handles.panelGenerate, 'mexFile', mexFile);
+		
+		% set the next panel available to switch
+		nextAvailable = getappdata(handles.panelGlobal, 'nextAvailable');
+		nextAvailable(end) = true;
+		setappdata(handles.panelGlobal, 'nextAvailable', nextAvailable);
+	catch err
+		cd(initialPath);
+		rethrow(err);
+	end
+	
 end
 
 

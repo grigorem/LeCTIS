@@ -72,7 +72,7 @@ function addChosenFunction(handles, functionType, functionName, functionDefiniti
     
 	% set the next panel available to switch
 	nextAvailable = getappdata(handles.panelGlobal, 'nextAvailable');
-	nextAvailable(2:5) = true(1, 4);
+	nextAvailable(2:end - 1) = true(1, length(nextAvailable) - 2);
 	setappdata(handles.panelGlobal, 'nextAvailable', nextAvailable);
 	
     % show the panel
