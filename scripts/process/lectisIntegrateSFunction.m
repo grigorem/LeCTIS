@@ -12,7 +12,7 @@ function blockHandle = lectisIntegrateSFunction(mexFile, modelName, mode, destin
 	% apply a strategy for each mode
 	if strcmp(mode, 'add')
 		destinationSystem = destination;
-		blockHandle = add_block(sFunctionSource, destinationSystem, 'MakeNameUnique', 'on');
+		blockHandle = add_block(sFunctionSource, [destinationSystem, '/', mexFileName], 'MakeNameUnique', 'on');
 	elseif strcmp(mode, 'replace')
 		replacedBlock = destination;
 		replacedBlockPosition = get_param(replacedBlock, 'Position');
