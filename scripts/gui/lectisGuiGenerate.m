@@ -119,6 +119,9 @@ function buttonGenerate_Callback(hObject, eventdata, handles)
 	try
 		% generate the function source file
 		legacy_code('sfcn_cmex_generate', lct);
+        
+        % generate TLC for code generation
+        legacy_code('sfcn_tlc_generate', lct);
 
 		% compile the source file and create the MEX file
 		legacy_code('compile', lct);
