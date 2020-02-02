@@ -25,12 +25,16 @@ function LeCTIS_OpeningFcn(hObject, eventdata, handles, varargin)
     addpath(genpath(fileparts(mfilename('fullpath'))));
     
     % put the window in the middle of the screen
-    screenSize = get(groot, 'ScreenSize');
-    windowPosition = get(hObject, 'Position');
-    
-    newWindowPosition = windowPosition;
-    newWindowPosition(1) = floor(screenSize(3) / 2) - floor(windowPosition(3) / 2);
-    newWindowPosition(2) = floor(screenSize(4) / 2) - floor(windowPosition(4) / 2);
+    if ispref('lectis', 'position')
+        newWindowPosition = getpref('lectis', 'position');
+    else
+        screenSize = get(groot, 'ScreenSize');
+        windowPosition = get(hObject, 'Position');
+
+        newWindowPosition = windowPosition;
+        newWindowPosition(1) = floor(screenSize(3) / 2) - floor(windowPosition(3) / 2);
+        newWindowPosition(2) = floor(screenSize(4) / 2) - floor(windowPosition(4) / 2);
+    end
     
     set(hObject, 'Position', newWindowPosition);
     
